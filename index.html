@@ -1,1635 +1,384 @@
 <!DOCTYPE html>
-<html lang="uz" class="dark">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>COLDBET — Qishki Sport va Jonli Efir</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        obsidian: '#050a14',
-                        charcoal: '#0a1426',
-                        ice: '#38bdf8',
-                        frost: '#e0f2fe',
-                    },
-                    boxShadow: {
-                        'ice-glow': '0 0 24px rgba(56, 189, 248, 0.38)',
-                        'ice-sm': '0 0 12px rgba(224, 242, 254, 0.35)',
-                        'frost-card': '0 8px 28px 0 rgba(2, 10, 24, 0.8)',
-                    }
-                }
-            }
-        }
-    </script>
+    <title>GRANY1 - Horror Game</title>
     <style>
-        body {
-            background: radial-gradient(circle at top, #0b1c36 0%, #050a14 70%, #02050a 100%);
-            color: #f0f9ff;
-            -webkit-tap-highlight-color: transparent;
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
         }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0b0b0b;
+            font-family: 'Courier New', Courier, monospace;
+            color: #fff;
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        /* Frosted Glassmorphism */
-        .glass-panel {
-            background: linear-gradient(180deg, rgba(13, 27, 50, 0.92) 0%, rgba(6, 13, 26, 0.96) 100%);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(224, 242, 254, 0.16);
-        }
-        .glass-card {
-            position: relative;
-            background: linear-gradient(145deg, rgba(18, 37, 66, 0.78) 0%, rgba(8, 17, 34, 0.92) 100%);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(224, 242, 254, 0.2);
-            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), 0 8px 24px rgba(2, 8, 18, 0.7);
-        }
-        .glass-card::before {
-            content: '';
+        
+        /* Screens */
+        .screen {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(224, 242, 254, 0.55), transparent);
-            border-radius: 16px 16px 0 0;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .odd-btn {
-            background: linear-gradient(180deg, rgba(14, 29, 52, 0.95) 0%, rgba(8, 16, 32, 0.98) 100%);
-            border: 1px solid rgba(186, 230, 253, 0.2);
-            transition: all 0.16s ease;
+        .active {
+            display: flex;
         }
-        .odd-btn:active {
-            transform: scale(0.95);
+
+        /* Menu Screen */
+        #menu-screen {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
         }
-        .odd-btn.selected {
-            background: linear-gradient(135deg, #e0f2fe 0%, #38bdf8 55%, #0284c7 100%);
-            color: #040914;
-            border-color: #ffffff;
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+        .menu-title {
+            position: absolute;
+            right: 8%;
+            top: 15%;
+            font-size: 5rem;
+            font-weight: bold;
+            color: #d1d1d1;
+            text-shadow: 0 0 20px #000, 2px 2px 5px #ff0000;
+            letter-spacing: 5px;
+            font-family: serif;
         }
-        .odd-btn.selected .odd-label {
-            color: #051326;
-            font-weight: 800;
+        .menu-buttons {
+            position: absolute;
+            left: 10%;
+            top: 30%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-        @keyframes pulse-live {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.35; transform: scale(1.25); }
+        .menu-btn {
+            background: transparent;
+            border: none;
+            color: #e0e0e0;
+            font-size: 2rem;
+            font-family: serif;
+            text-align: left;
+            cursor: pointer;
+            text-shadow: 2px 2px 4px #000;
+            transition: 0.2s;
         }
-        .live-dot {
-            animation: pulse-live 1.4s infinite ease-in-out;
+        .menu-btn:hover {
+            color: #ff3333;
+            transform: scale(1.05);
+        }
+        .remove-ads {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid #fff;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.5);
+        }
+
+        /* Options Screen */
+        #options-screen {
+            background: #111;
+            justify-content: flex-start;
+            padding: 30px;
+        }
+        .options-header {
+            font-size: 3rem;
+            font-style: italic;
+            font-family: serif;
+            margin-bottom: 20px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 80%;
+            max-width: 800px;
+        }
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-group label {
+            font-size: 1.5rem;
+            font-family: serif;
+            color: #d1d1d1;
+        }
+        .option-group select {
+            padding: 8px;
+            font-size: 1.2rem;
+            background: #222;
+            color: #fff;
+            border: 1px solid #555;
+        }
+        .difficulty-box {
+            margin-top: 20px;
+            border: 1px solid #fff;
+            padding: 15px;
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255,255,255,0.05);
+        }
+        .options-footer {
+            position: absolute;
+            bottom: 20px;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Game Screen */
+        #game-screen {
+            background: #151515;
+            perspective: 800px;
+        }
+        .room-view {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: radial-gradient(circle, #2a2522 0%, #0d0a08 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .room-walls {
+            width: 80%;
+            height: 80%;
+            border: 5px solid #36291f;
+            background: #4a3b32;
+            position: relative;
+            box-shadow: inset 0 0 50px #000;
+        }
+        /* HUD */
+        .hud-top-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .icon-btn {
+            background: #222;
+            border: 2px solid #fff;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .player-status {
+            font-size: 2rem;
+        }
+        .joystick-area {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .joystick-knob {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            position: absolute;
+        }
+        .action-btn-right {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            padding: 15px 25px;
+            background: #500;
+            border: 2px solid #fff;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Jumpscare Overlay */
+        #jumpscare-screen {
+            background: #000;
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #jumpscare-screen img {
+            width: 80%;
+            max-width: 500px;
+            border: 5px solid red;
+            animation: shake 0.1s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            20% { transform: translate(-2px, -3px) rotate(-1deg); }
+            40% { transform: translate(-3px, 2px) rotate(1deg); }
+            60% { transform: translate(3px, 1px) rotate(0deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            100% { transform: translate(1px, 2px) rotate(-1deg); }
         }
     </style>
 </head>
-<body class="flex justify-center min-h-screen bg-[#03060d] overflow-x-hidden">
+<body>
 
-    <!-- Mobile App Shell -->
-    <div class="w-full max-w-md bg-obsidian min-h-screen flex flex-col relative shadow-2xl border-x border-sky-200/15 overflow-x-hidden pb-24">
+    <!-- 1. MAIN MENU -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-title">GRANNY</div>
+        <div class="menu-buttons">
+            <button class="menu-btn" onclick="startGame()">PLAY</button>
+            <button class="menu-btn" onclick="openOptions()">OPTIONS</button>
+            <button class="menu-btn" onclick="alert('GRANY1 - Created for you!')">MORE GAMES</button>
+            <button class="menu-btn" onclick="window.close()">QUIT</button>
+        </div>
+        <div class="remove-ads">Remove Ads</div>
+    </div>
 
-        <!-- Falling Snow Canvas -->
-        <canvas id="snow-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-40"></canvas>
-
-        <!-- 1. TOP HEADER -->
-        <header class="sticky top-0 z-30 glass-panel px-3.5 py-3 flex items-center justify-between border-b border-sky-200/15">
-            <!-- Brand Logo -->
-            <div onclick="navigateTo('sports', 'football')" class="flex items-center gap-2 cursor-pointer">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-white via-sky-300 to-sky-600 flex items-center justify-center shadow-ice-sm border border-white/60">
-                    <i class="fa-solid fa-snowflake text-obsidian text-lg animate-spin" style="animation-duration: 16s;"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-black tracking-wider text-white leading-none">
-                        COLD<span class="text-ice">BET</span>
-                    </h1>
-                    <span class="text-[9px] text-sky-200/80 font-semibold tracking-widest uppercase">Qishki Arena</span>
-                </div>
+    <!-- 2. OPTIONS SCREEN -->
+    <div id="options-screen" class="screen">
+        <div class="options-header">Options</div>
+        <div class="options-grid">
+            <div class="option-group">
+                <label>Difficulty</label>
+                <select id="diff-select" onchange="updateDiff()">
+                    <option value="Easy">Easy</option>
+                    <option value="Normal" selected>Normal</option>
+                    <option value="Hard">Hard</option>
+                    <option value="Extreme">Extreme</option>
+                </select>
             </div>
-
-            <!-- Snow Toggle & User Balance (+ To'ldirish) -->
-            <div class="flex items-center gap-1.5">
-                <button type="button" onclick="toggleSnow()" id="snow-toggle-btn" title="Qor yog'ishini yoqish/o'chirish"
-                    class="w-8 h-8 rounded-xl bg-sky-400/20 border border-sky-200/30 text-sky-100 hover:bg-sky-400/30 flex items-center justify-center transition active:scale-90">
-                    <i class="fa-solid fa-snowflake text-xs"></i>
-                </button>
-
-                <div class="flex items-center gap-1.5 bg-charcoal/95 border border-sky-200/25 rounded-2xl p-1 pl-2.5 shadow-inner">
-                    <div class="text-right">
-                        <div class="text-[9px] text-sky-200/70 leading-none">Balans</div>
-                        <div id="user-balance" class="text-[11px] font-extrabold text-white tracking-tight">500 000 <span class="text-ice text-[10px]">UZS</span></div>
-                    </div>
-                    <button type="button" onclick="instantTopUp()" class="bg-gradient-to-r from-sky-200 to-ice hover:from-white hover:to-sky-300 text-obsidian font-extrabold text-[11px] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1 shadow-ice-sm active:scale-95">
-                        <i class="fa-solid fa-plus text-[10px]"></i>
-                        <span>To‘ldirish</span>
-                    </button>
-                </div>
+            <div class="option-group">
+                <label>Game Theme</label>
+                <select>
+                    <option>Default (Snow/Dark)</option>
+                    <option>Classic</option>
+                </select>
             </div>
-        </header>
-
-        <!-- 3. EXPANDABLE LIVE STREAM VIDEO PLAYER -->
-        <section id="live-player-container" class="hidden px-3.5 pt-3 z-25">
-            <div class="rounded-2xl overflow-hidden bg-[#040914] border-2 border-sky-200/40 shadow-ice-glow">
-                <div id="player-screen" class="relative w-full h-48 bg-gradient-to-b from-[#0b2240] via-[#061224] to-[#030811] overflow-hidden select-none">
-                    <!-- Top Player Overlay -->
-                    <div class="absolute top-2.5 left-3 right-3 z-20 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider shadow">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white live-dot"></span> JONLI EFIR
-                            </span>
-                            <span class="px-2 py-0.5 rounded-md bg-slate-900/80 border border-sky-200/20 text-sky-100 text-[10px] font-bold flex items-center gap-1">
-                                <i class="fa-solid fa-eye text-ice"></i> <span id="player-viewers">28,450</span>
-                            </span>
-                        </div>
-                        <button type="button" onclick="closeLivePlayer()" class="w-7 h-7 rounded-lg bg-rose-500/90 hover:bg-rose-600 text-white text-xs flex items-center justify-center shadow transition active:scale-90">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-
-                    <!-- Animated Sport Canvas -->
-                    <canvas id="stream-canvas" class="w-full h-full block"></canvas>
-
-                    <!-- Scoreboard Overlay -->
-                    <div class="absolute bottom-2.5 left-3 right-3 z-20 glass-panel rounded-xl px-3 py-1.5 flex items-center justify-between border border-sky-200/25">
-                        <div class="flex items-center gap-1.5 max-w-[38%]">
-                            <span id="player-icon1" class="text-sm">🇺🇿</span>
-                            <span id="player-team1" class="text-xs font-extrabold text-white truncate">O'zbekiston</span>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <span id="player-score" class="text-sm font-black text-sky-200 tracking-wider leading-none">1 : 0</span>
-                            <span id="player-time" class="text-[9px] text-rose-400 font-bold mt-0.5">64:18</span>
-                        </div>
-                        <div class="flex items-center justify-end gap-1.5 max-w-[38%]">
-                            <span id="player-team2" class="text-xs font-extrabold text-white truncate">Eron</span>
-                            <span id="player-icon2" class="text-sm">🇮🇷</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Commentary Ticker -->
-                <div class="bg-[#081529] px-3 py-2 flex items-center justify-between text-[11px] border-t border-sky-200/15">
-                    <div class="flex items-center gap-1.5 text-sky-100 truncate">
-                        <i class="fa-solid fa-snowflake text-ice"></i>
-                        <span id="player-commentary" class="truncate font-medium">Jonli translyatsiya ketmoqda...</span>
-                    </div>
-                    <span class="text-[10px] font-bold text-sky-200 bg-sky-400/15 px-1.5 py-0.5 rounded border border-sky-300/25 whitespace-nowrap ml-2">FROST HD</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. CATEGORY TABS -->
-        <div id="category-tabs-wrapper" class="px-3.5 pt-3 sticky top-[60px] z-20 bg-obsidian/90 backdrop-blur-md pb-2 border-b border-sky-200/10">
-            <div class="flex gap-2 overflow-x-auto no-scrollbar">
-                <button type="button" onclick="selectCategory('football')" id="tab-football" class="sport-tab py-2 px-3.5 rounded-xl text-xs font-extrabold bg-gradient-to-r from-sky-100 to-ice text-obsidian shadow-ice-sm transition flex items-center gap-1.5 whitespace-nowrap">
-                    ⚽ Futbol
-                </button>
-                <button type="button" onclick="selectCategory('combat')" id="tab-combat" class="sport-tab py-2 px-3.5 rounded-xl text-xs font-semibold bg-charcoal text-sky-100 border border-sky-200/20 transition flex items-center gap-1.5 whitespace-nowrap">
-                    🥊 Kurash / MMA
-                </button>
-                <button type="button" onclick="selectCategory('basketball')" id="tab-basketball" class="sport-tab py-2 px-3.5 rounded-xl text-xs font-semibold bg-charcoal text-sky-100 border border-sky-200/20 transition flex items-center gap-1.5 whitespace-nowrap">
-                    🏀 Basketbol
-                </button>
-                <button type="button" onclick="selectCategory('tennis')" id="tab-tennis" class="sport-tab py-2 px-3.5 rounded-xl text-xs font-semibold bg-charcoal text-sky-100 border border-sky-200/20 transition flex items-center gap-1.5 whitespace-nowrap">
-                    🎾 Tennis
-                </button>
-                <button type="button" onclick="selectCategory('esports')" id="tab-esports" class="sport-tab py-2 px-3.5 rounded-xl text-xs font-semibold bg-charcoal text-sky-100 border border-sky-200/20 transition flex items-center gap-1.5 whitespace-nowrap">
-                    🎮 Kibersport
-                </button>
-                <button type="button" onclick="selectCategory('minigames')" id="tab-minigames" class="sport-tab py-2 px-3.5 rounded-xl text-xs font-semibold bg-charcoal text-amber-300 border border-amber-400/35 transition flex items-center gap-1.5 whitespace-nowrap">
-                    🎲 Tezkor O‘yinlar
-                </button>
+            <div class="option-group">
+                <label>Quality</label>
+                <select>
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                </select>
             </div>
         </div>
-
-        <!-- MAIN DYNAMIC CONTENT -->
-        <main id="main-content" class="flex-1 px-3.5 pt-3 space-y-3 relative z-10">
-            <!-- Rendered by JS -->
-        </main>
-
-        <!-- 5. FLOATING BET SLIP (KUPON) BAR -->
-        <div id="floating-coupon-bar" class="fixed bottom-[70px] left-1/2 -translate-x-1/2 w-full max-w-md px-3.5 z-30 hidden">
-            <button type="button" onclick="openBetSlipDrawer()" class="w-full bg-gradient-to-r from-sky-100 via-ice to-sky-500 text-obsidian rounded-2xl p-3 shadow-ice-glow border border-white/70 flex items-center justify-between font-bold active:scale-[0.98] transition">
-                <div class="flex items-center gap-2.5">
-                    <span id="floating-count" class="w-7 h-7 rounded-xl bg-obsidian text-ice font-black text-sm flex items-center justify-center">0</span>
-                    <div class="text-left">
-                        <div class="text-xs font-black uppercase tracking-wide">Muzdek Kupon (Bet Slip)</div>
-                        <div id="floating-odds-text" class="text-[11px] font-bold opacity-85">Umumiy koeff: 1.00</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-1.5 text-xs font-extrabold bg-obsidian/15 px-3 py-1.5 rounded-xl">
-                    <span>Ochish</span>
-                    <i class="fa-solid fa-chevron-up"></i>
-                </div>
-            </button>
+        <div class="difficulty-box" id="diff-desc">
+            <strong>Difficulty: Normal</strong><br>*Opportunity to get a bonus day.
         </div>
+        <div class="options-footer">
+            <button class="icon-btn" onclick="closeOptions()">&lt; Back</button>
+            <button class="icon-btn" onclick="closeOptions()">Continue &gt;</button>
+        </div>
+    </div>
 
-        <!-- 7. BOTTOM NAVIGATION BAR -->
-        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md glass-panel border-t border-sky-200/20 px-1.5 py-2 grid grid-cols-4 gap-1 z-40">
-            <button type="button" onclick="navigateTo('sports', 'football')" id="nav-sports" class="nav-btn text-ice flex flex-col items-center justify-center gap-1 py-1 rounded-xl transition">
-                <i class="fa-solid fa-snowflake text-base"></i>
-                <span class="text-[10px] font-extrabold">Asosiy</span>
-            </button>
-            <button type="button" onclick="openTopLiveStream()" id="nav-live" class="nav-btn text-sky-200/65 hover:text-white flex flex-col items-center justify-center gap-1 py-1 rounded-xl transition relative">
-                <span class="w-2 h-2 rounded-full bg-rose-500 live-dot absolute top-1 right-6"></span>
-                <i class="fa-solid fa-tv text-base"></i>
-                <span class="text-[10px] font-semibold">Jonli Efir</span>
-            </button>
-            <button type="button" onclick="navigateTo('minigames')" id="nav-minigames" class="nav-btn text-sky-200/65 hover:text-white flex flex-col items-center justify-center gap-1 py-1 rounded-xl transition">
-                <i class="fa-solid fa-dice text-base"></i>
-                <span class="text-[10px] font-semibold">O‘yinlar</span>
-            </button>
-            <button type="button" onclick="navigateTo('history')" id="nav-history" class="nav-btn text-sky-200/65 hover:text-white flex flex-col items-center justify-center gap-1 py-1 rounded-xl transition relative">
-                <span id="history-badge" class="hidden absolute top-0.5 right-4 min-w-[16px] h-[16px] px-1 rounded-full bg-ice text-obsidian text-[9px] font-black flex items-center justify-center">0</span>
-                <i class="fa-solid fa-scroll text-base"></i>
-                <span class="text-[10px] font-semibold">Tarix</span>
-            </button>
-        </nav>
-
-        <!-- BET SLIP (KUPON) DRAWER -->
-        <div id="betslip-drawer" class="fixed inset-0 z-50 hidden flex items-end justify-center bg-black/80 backdrop-blur-sm">
-            <div class="w-full max-w-md bg-gradient-to-b from-[#0e203c] to-[#060f1d] border-t-2 border-sky-200/40 rounded-t-3xl p-5 max-h-[88vh] flex flex-col shadow-2xl">
-                <div class="w-12 h-1.5 bg-sky-200/30 rounded-full mx-auto mb-3"></div>
-
-                <!-- Drawer Header -->
-                <div class="flex items-center justify-between pb-3 border-b border-sky-200/15">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-ticket text-ice text-lg"></i>
-                        <h3 class="text-base font-extrabold text-white">Kupon (Bet Slip)</h3>
-                        <span id="drawer-count" class="px-2 py-0.5 rounded-full bg-ice/20 text-sky-100 border border-sky-200/30 text-xs font-bold">0</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <button type="button" onclick="clearCoupon()" class="text-xs text-rose-400 hover:text-rose-300 font-bold">Tozalash</button>
-                        <button type="button" onclick="closeBetSlipDrawer()" class="w-8 h-8 rounded-full bg-slate-800 border border-sky-200/20 text-sky-100 flex items-center justify-center">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Selected Picks -->
-                <div id="coupon-items-list" class="flex-1 overflow-y-auto py-3 space-y-2.5 no-scrollbar min-h-[110px]"></div>
-
-                <!-- Stake Input & Payout -->
-                <div id="coupon-footer" class="pt-3 border-t border-sky-200/15 space-y-3">
-                    <div>
-                        <div class="flex justify-between text-xs text-sky-200/75 mb-1.5">
-                            <span>Stavka summasi (UZS)</span>
-                            <button type="button" onclick="setQuickStake(balance)" class="text-ice font-bold hover:underline">Maksimal</button>
-                        </div>
-                        <div class="relative">
-                            <input type="number" id="stake-input" value="50000" min="1000" step="1000" oninput="recalculatePayout()"
-                                class="w-full bg-obsidian border border-sky-200/30 focus:border-ice rounded-xl px-4 py-2.5 text-white font-extrabold text-base outline-none">
-                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-sky-200/60">UZS</span>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2 mt-2">
-                            <button type="button" onclick="setQuickStake(10000)" class="py-1.5 rounded-lg bg-slate-900 hover:bg-sky-900/40 text-xs font-bold text-sky-100 border border-sky-200/20">10 000</button>
-                            <button type="button" onclick="setQuickStake(50000)" class="py-1.5 rounded-lg bg-slate-900 hover:bg-sky-900/40 text-xs font-bold text-sky-100 border border-sky-200/20">50 000</button>
-                            <button type="button" onclick="setQuickStake(100000)" class="py-1.5 rounded-lg bg-slate-900 hover:bg-sky-900/40 text-xs font-bold text-sky-100 border border-sky-200/20">100 000</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-obsidian/90 rounded-2xl p-3 border border-sky-200/20 space-y-1.5">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-sky-200/70">Umumiy koeffitsiyent:</span>
-                            <span id="total-odds-display" class="font-extrabold text-ice">1.00</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-sky-100 font-semibold">Kutilayotgan yutuq:</span>
-                            <span id="potential-win-display" class="font-black text-emerald-400">0 UZS</span>
-                        </div>
-                    </div>
-
-                    <button type="button" onclick="placeCouponBet()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-100 via-ice to-sky-500 text-obsidian font-black text-sm uppercase tracking-wider shadow-ice-glow border border-white/60 active:scale-[0.98] transition">
-                        Stavka tikish
-                    </button>
-                </div>
+    <!-- 3. GAMEPLAY SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="room-view">
+            <div class="room-walls">
+                <div style="position: absolute; top: 40%; left: 40%; color: #888; font-size: 1.5rem;" id="granny-status">Uyni qidirmoqda... Day: <span id="day-count">1</span>/5</div>
             </div>
         </div>
-
-        <!-- TOAST NOTIFICATION -->
-        <div id="toast-box" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 w-[92%] max-w-sm">
-            <div id="toast-inner" class="glass-panel border border-sky-200/40 text-white px-4 py-3 rounded-2xl shadow-ice-glow flex items-center gap-3 text-xs font-bold">
-                <i id="toast-icon" class="fa-solid fa-snowflake text-ice text-base"></i>
-                <span id="toast-message">Xabar</span>
-            </div>
+        
+        <div class="hud-top-left">
+            <div class="player-status">👤</div>
+            <button class="icon-btn" onclick="openOptions()">⚙️</button>
         </div>
 
+        <div class="joystick-area" id="joystick">
+            <div class="joystick-knob" id="knob"></div>
+        </div>
+
+        <button class="action-btn-right" onclick="makeNoise()">Shovqin chiqarish! 🔊</button>
+    </div>
+
+    <!-- 4. JUMPSCARE SCREEN -->
+    <div id="jumpscare-screen" class="screen">
+        <h1 style="color: red; font-size: 3rem;">GRANNY SENINGIZNI TOPDI!</h1>
+        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=500&auto=format&fit=crop" alt="Granny">
+        <p style="margin-top: 20px; font-size: 1.5rem;">Qolgan kunlar: <span id="days-left">4</span></p>
+        <button class="action-btn-right" style="position:static; margin-top:20px;" onclick="restartDay()">Davom etish</button>
     </div>
 
     <script>
-        // --- APPLICATION STATE ---
-        let balance = 500000;
-        let snowEnabled = true;
-        let activeView = 'sports';     // 'sports' | 'minigames' | 'history'
-        let activeCategory = 'football'; // 'football' | 'combat' | 'basketball' | 'tennis' | 'esports' | 'minigames'
-        let coupon = [];
-        let historyLog = [];
-        let activeStreamMatch = null;
-        let streamAnimId = null;
-        let commentaryTimer = null;
-        let wheelAngle = 0;
-        let isWheelSpinning = false;
+        let currentDay = 1;
 
-        // --- MATCHES DATABASE ---
-        const matchesData = [
-            // FOOTBALL
-            {
-                id: 'f1',
-                category: 'football',
-                league: 'JCh Saralash • Osiyo',
-                isLive: true,
-                time: "64' • 2-taym",
-                team1: "O'zbekiston",
-                team2: "Eron",
-                score: "1 : 0",
-                icon1: "🇺🇿",
-                icon2: "🇮🇷",
-                viewers: "28,450",
-                commentaries: [
-                    "Eldor Shomurodov qarshi hujumga o'tmoqda!",
-                    "Abbosbek Fayzullayevdan ajoyib uzatma!",
-                    "Darvozabon to'pni qaytarib qoldi!"
-                ],
-                markets: [
-                    { code: '1', label: '1', odd: 2.15 },
-                    { code: 'X', label: 'X', odd: 3.10 },
-                    { code: '2', label: '2', odd: 3.65 }
-                ]
-            },
-            {
-                id: 'f2',
-                category: 'football',
-                league: 'La Liga • El Clasico',
-                isLive: true,
-                time: "38' • 1-taym",
-                team1: "Real Madrid",
-                team2: "Barselona",
-                score: "2 : 1",
-                icon1: "👑",
-                icon2: "🔵🔴",
-                viewers: "54,120",
-                commentaries: [
-                    "Vinisius Junior chap qanotdan yorib kirdi!",
-                    "Lamin Yamal uzoq masofadan zarba berdi!",
-                    "Yuqori sur'atdagi o'yin davom etmoqda!"
-                ],
-                markets: [
-                    { code: '1', label: '1', odd: 1.75 },
-                    { code: 'X', label: 'X', odd: 3.90 },
-                    { code: '2', label: '2', odd: 4.20 }
-                ]
-            },
-            {
-                id: 'f3',
-                category: 'football',
-                league: "O'zbekiston Superligasi",
-                isLive: false,
-                time: "Bugun, 19:00",
-                team1: "Paxtakor",
-                team2: "Navbahor",
-                score: null,
-                icon1: "🦁",
-                icon2: "🦅",
-                viewers: "0",
-                commentaries: [],
-                markets: [
-                    { code: '1', label: '1', odd: 2.05 },
-                    { code: 'X', label: 'X', odd: 3.15 },
-                    { code: '2', label: '2', odd: 3.55 }
-                ]
-            },
-
-            // COMBAT / MMA / WRESTLING
-            {
-                id: 'c1',
-                category: 'combat',
-                league: 'UFC 311 • Chempionlik jangi',
-                isLive: true,
-                time: "2-raund • JONLI",
-                team1: "Islom Maxachev",
-                team2: "Arman Tsarukyan",
-                score: "R2 • 03:12",
-                icon1: "🥋",
-                icon2: "🥊",
-                viewers: "41,920",
-                commentaries: [
-                    "Maxachev parterga o'tkazishga harakat qilmoqda!",
-                    "Kuchli chap qo'l zarbasi nishonga tegdi!",
-                    "Oktagon markazida keskin kurash ketmoqda."
-                ],
-                markets: [
-                    { code: 'P1', label: 'P1 (Maxachev)', odd: 1.45 },
-                    { code: 'P2', label: 'P2 (Tsarukyan)', odd: 2.75 }
-                ]
-            },
-            {
-                id: 'c2',
-                category: 'combat',
-                league: 'Erkin Kurash • Jahon Kubogi',
-                isLive: true,
-                time: "2-davr • 01:18",
-                team1: "Razambek Jamalov",
-                team2: "Kayl Deyk",
-                score: "6 : 4",
-                icon1: "🇺🇿",
-                icon2: "🇺🇸",
-                viewers: "24,310",
-                commentaries: [
-                    "Razambek Jamalov oyoqqa kirib 2 ball qo'lga kiritdi!",
-                    "Gilam chetida keskin himoyalanish davom etmoqda.",
-                    "Final bahsining so'nggi daqiqasi boshlandi!"
-                ],
-                markets: [
-                    { code: 'P1', label: 'P1 (Jamalov)', odd: 1.62 },
-                    { code: 'P2', label: 'P2 (Deyk)', odd: 2.28 }
-                ]
-            },
-            {
-                id: 'c3',
-                category: 'combat',
-                league: 'Pro Boks • Super og‘ir vazn',
-                isLive: false,
-                time: "Bugun, 23:00",
-                team1: "Bahodir Jalolov",
-                team2: "Aleksandr Usik",
-                score: null,
-                icon1: "🇺🇿",
-                icon2: "🇺🇦",
-                viewers: "0",
-                commentaries: [],
-                markets: [
-                    { code: 'P1', label: 'P1 (Jalolov)', odd: 1.92 },
-                    { code: 'P2', label: 'P2 (Usik)', odd: 1.88 }
-                ]
-            },
-
-            // BASKETBALL
-            {
-                id: 'b1',
-                category: 'basketball',
-                league: 'NBA • Muntazam Chempionat',
-                isLive: true,
-                time: "3-chorak • 04:19",
-                team1: "LA Leykers",
-                team2: "GS Uorriorz",
-                score: "84 : 81",
-                icon1: "🏀",
-                icon2: "🔥",
-                viewers: "31,200",
-                commentaries: [
-                    "LeBron Jeymsdan kuchli slamdank!",
-                    "Stefen Karri uzoq masofadan 3 ochkolik savat tushirdi!",
-                    "Leykers himoyada to'pni olib qo'ydi."
-                ],
-                markets: [
-                    { code: 'P1', label: 'P1 (Leykers)', odd: 1.85 },
-                    { code: 'P2', label: 'P2 (Uorriorz)', odd: 1.95 }
-                ]
-            },
-            {
-                id: 'b2',
-                category: 'basketball',
-                league: 'NBA • Sharq va G‘arb',
-                isLive: false,
-                time: "Ertaga, 05:30",
-                team1: "Boston Seltiks",
-                team2: "Denver Naggets",
-                score: null,
-                icon1: "☘️",
-                icon2: "⛏️",
-                viewers: "0",
-                commentaries: [],
-                markets: [
-                    { code: 'P1', label: 'P1 (Seltiks)', odd: 1.78 },
-                    { code: 'P2', label: 'P2 (Naggets)', odd: 2.04 }
-                ]
-            },
-
-            // TENNIS
-            {
-                id: 't1',
-                category: 'tennis',
-                league: 'ATP Finals • Yarim Final',
-                isLive: true,
-                time: "2-set • 4:3",
-                team1: "Karlos Alkaras",
-                team2: "Yannik Sinner",
-                score: "1 : 0 (6-4)",
-                icon1: "🇪🇸",
-                icon2: "🇮🇹",
-                viewers: "19,640",
-                commentaries: [
-                    "Alkarasdan ajoyib drop-shot zarbasi!",
-                    "Sinner kuchli eys bilan hisobni tenglashtirdi.",
-                    "Breyk-poynt! Hal qiluvchi to'p o'ynalmoqda."
-                ],
-                markets: [
-                    { code: 'P1', label: 'P1 (Alkaras)', odd: 1.72 },
-                    { code: 'P2', label: 'P2 (Sinner)', odd: 2.10 }
-                ]
-            },
-            {
-                id: 't2',
-                category: 'tennis',
-                league: 'Grand Slam • Katta Dubulg‘a',
-                isLive: false,
-                time: "Ertaga, 16:00",
-                team1: "Novak Jokovich",
-                team2: "Daniil Medvedev",
-                score: null,
-                icon1: "🇷🇸",
-                icon2: "🎾",
-                viewers: "0",
-                commentaries: [],
-                markets: [
-                    { code: 'P1', label: 'P1 (Jokovich)', odd: 1.82 },
-                    { code: 'P2', label: 'P2 (Medvedev)', odd: 1.98 }
-                ]
-            },
-
-            // ESPORTS
-            {
-                id: 'e1',
-                category: 'esports',
-                league: 'CS2 Major • Chorak Final',
-                isLive: true,
-                time: "2-xarita • Mirage",
-                team1: "NAVI",
-                team2: "G2 Esports",
-                score: "11 : 9",
-                icon1: "⚡",
-                icon2: "🥷",
-                viewers: "47,890",
-                commentaries: [
-                    "b1t dan ajoyib 3 ta headshot! Raund NAVI foydasiga!",
-                    "m0NESY AWP bilan B nuqtani yopib qo'ydi.",
-                    "Bomba A nuqtaga o'rnatildi, 20 soniya qoldi!"
-                ],
-                markets: [
-                    { code: 'P1', label: 'P1 (NAVI)', odd: 1.65 },
-                    { code: 'P2', label: 'P2 (G2)', odd: 2.20 }
-                ]
-            },
-            {
-                id: 'e2',
-                category: 'esports',
-                league: 'Dota 2 • Riyadh Masters',
-                isLive: false,
-                time: "Bugun, 21:00",
-                team1: "Team Spirit",
-                team2: "Team Falcons",
-                score: null,
-                icon1: "🐉",
-                icon2: "🦅",
-                viewers: "0",
-                commentaries: [],
-                markets: [
-                    { code: 'P1', label: 'P1 (Spirit)', odd: 1.90 },
-                    { code: 'P2', label: 'P2 (Falcons)', odd: 1.90 }
-                ]
-            }
-        ];
-
-        // --- UTILITIES ---
-        function formatUZS(num) {
-            return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
         }
 
-        function updateBalanceDisplay() {
-            const el = document.getElementById('user-balance');
-            if (el) {
-                el.innerHTML = `${formatUZS(balance)} <span class="text-ice text-[10px]">UZS</span>`;
-            }
+        function startGame() {
+            showScreen('game-screen');
+            startGrannyAI();
         }
 
-        function instantTopUp() {
-            balance += 100000;
-            updateBalanceDisplay();
-            showToast("Balansga +100 000 UZS qo'shildi! ❄️", "success");
+        function openOptions() {
+            showScreen('options-screen');
         }
 
-        let toastTimer = null;
-        function showToast(msg, type = 'success') {
-            const box = document.getElementById('toast-box');
-            const icon = document.getElementById('toast-icon');
-            const text = document.getElementById('toast-message');
-            const inner = document.getElementById('toast-inner');
-
-            text.textContent = msg;
-            if (type === 'error') {
-                icon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-base';
-                inner.style.borderColor = 'rgba(244, 63, 94, 0.55)';
-            } else {
-                icon.className = 'fa-solid fa-snowflake text-ice text-base';
-                inner.style.borderColor = 'rgba(186, 230, 253, 0.45)';
-            }
-
-            box.classList.remove('opacity-0');
-            box.classList.add('opacity-100');
-
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                box.classList.remove('opacity-100');
-                box.classList.add('opacity-0');
-            }, 2500);
+        function closeOptions() {
+            showScreen('menu-screen');
         }
 
-        // --- FALLING SNOW ANIMATION ---
-        function initSnowfall() {
-            const canvas = document.getElementById('snow-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let flakes = [];
-
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resize();
-            window.addEventListener('resize', resize);
-
-            for (let i = 0; i < 55; i++) {
-                flakes.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    r: Math.random() * 2.3 + 0.8,
-                    vy: Math.random() * 0.85 + 0.35,
-                    vx: Math.random() * 0.4 - 0.2,
-                    alpha: Math.random() * 0.5 + 0.2
-                });
-            }
-
-            function loop() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (snowEnabled) {
-                    for (let i = 0; i < flakes.length; i++) {
-                        const f = flakes[i];
-                        ctx.beginPath();
-                        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(224, 242, 254, ${f.alpha})`;
-                        ctx.fill();
-
-                        f.y += f.vy;
-                        f.x += f.vx + Math.sin(f.y * 0.015) * 0.25;
-                        if (f.y > canvas.height) {
-                            f.y = -5;
-                            f.x = Math.random() * canvas.width;
-                        }
-                        if (f.x > canvas.width) f.x = 0;
-                        if (f.x < 0) f.x = canvas.width;
-                    }
-                }
-                requestAnimationFrame(loop);
-            }
-            loop();
+        function updateDiff() {
+            let val = document.getElementById('diff-select').value;
+            let desc = document.getElementById('diff-desc');
+            if(val === 'Easy') desc.innerHTML = `<strong>Difficulty: Easy</strong><br>*Granny is slower, extra days.`;
+            if(val === 'Normal') desc.innerHTML = `<strong>Difficulty: Normal</strong><br>*Opportunity to get a bonus day.`;
+            if(val === 'Hard') desc.innerHTML = `<strong>Difficulty: Hard</strong><br>*Granny is fast, fewer items.`;
+            if(val === 'Extreme') desc.innerHTML = `<strong>Difficulty: Extreme</strong><br>*No mercy, extreme speed.`;
         }
 
-        function toggleSnow() {
-            snowEnabled = !snowEnabled;
-            const btn = document.getElementById('snow-toggle-btn');
-            if (snowEnabled) {
-                btn.classList.remove('opacity-50');
-                showToast("Qor yog'ishi yoqildi ❄️");
-            } else {
-                btn.classList.add('opacity-50');
-                showToast("Qor effekti o'chirildi");
-            }
-        }
-
-        // --- NAVIGATION & CATEGORY TABS ---
-        function navigateTo(view, category = null) {
-            activeView = view;
-            if (category) {
-                activeCategory = category;
-            }
-
-            // Update Bottom Nav styling
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('text-ice');
-                b.classList.add('text-sky-200/65');
-            });
-
-            if (view === 'sports') {
-                document.getElementById('nav-sports').classList.add('text-ice');
-                document.getElementById('nav-sports').classList.remove('text-sky-200/65');
-                document.getElementById('category-tabs-wrapper').classList.remove('hidden');
-                selectCategory(activeCategory);
-            } else if (view === 'minigames') {
-                document.getElementById('nav-minigames').classList.add('text-ice');
-                document.getElementById('nav-minigames').classList.remove('text-sky-200/65');
-                document.getElementById('category-tabs-wrapper').classList.remove('hidden');
-                selectCategory('minigames');
-            } else if (view === 'history') {
-                document.getElementById('nav-history').classList.add('text-ice');
-                document.getElementById('nav-history').classList.remove('text-sky-200/65');
-                document.getElementById('category-tabs-wrapper').classList.add('hidden');
-                renderHistoryView();
-            }
-        }
-
-        function selectCategory(cat) {
-            activeCategory = cat;
-
-            // Update Category Tabs UI
-            document.querySelectorAll('.sport-tab').forEach(tab => {
-                tab.classList.remove('bg-gradient-to-r', 'from-sky-100', 'to-ice', 'text-obsidian', 'shadow-ice-sm', 'font-extrabold');
-                if (tab.id === 'tab-minigames') {
-                    tab.classList.add('bg-charcoal', 'text-amber-300', 'border', 'border-amber-400/35', 'font-semibold');
-                } else {
-                    tab.classList.add('bg-charcoal', 'text-sky-100', 'border', 'border-sky-200/20', 'font-semibold');
-                }
-            });
-
-            const activeTab = document.getElementById(`tab-${cat}`);
-            if (activeTab) {
-                activeTab.classList.remove('bg-charcoal', 'text-sky-100', 'text-amber-300', 'border', 'border-sky-200/20', 'border-amber-400/35', 'font-semibold');
-                activeTab.classList.add('bg-gradient-to-r', 'from-sky-100', 'to-ice', 'text-obsidian', 'shadow-ice-sm', 'font-extrabold');
-            }
-
-            if (cat === 'minigames') {
-                activeView = 'minigames';
-                document.querySelectorAll('.nav-btn').forEach(b => {
-                    b.classList.remove('text-ice');
-                    b.classList.add('text-sky-200/65');
-                });
-                document.getElementById('nav-minigames').classList.add('text-ice');
-                document.getElementById('nav-minigames').classList.remove('text-sky-200/65');
-                renderMiniGamesView();
-            } else {
-                activeView = 'sports';
-                document.querySelectorAll('.nav-btn').forEach(b => {
-                    b.classList.remove('text-ice');
-                    b.classList.add('text-sky-200/65');
-                });
-                document.getElementById('nav-sports').classList.add('text-ice');
-                document.getElementById('nav-sports').classList.remove('text-sky-200/65');
-                renderMatchesView(cat);
-            }
-        }
-
-        // --- RENDER SPORT MATCHES ---
-        function renderMatchesView(cat) {
-            const container = document.getElementById('main-content');
-            const filtered = matchesData.filter(m => m.category === cat);
-
-            const catIcons = {
-                football: 'fa-futbol text-ice',
-                combat: 'fa-hand-fist text-sky-200',
-                basketball: 'fa-basketball text-amber-400',
-                tennis: 'fa-baseball text-lime-300',
-                esports: 'fa-gamepad text-purple-400'
-            };
-
-            let html = '';
-            filtered.forEach(match => {
-                const selectedPick = coupon.find(c => c.matchId === match.id);
-                const gridCols = match.markets.length === 3 ? 'grid-cols-3' : 'grid-cols-2';
-                const isWatching = activeStreamMatch && activeStreamMatch.id === match.id;
-
-                html += `
-                <div class="glass-card rounded-2xl p-4 transition ${isWatching ? 'border-sky-200 shadow-ice-glow' : ''}">
-                    <!-- League & Status -->
-                    <div class="flex items-center justify-between text-[11px] mb-3 pb-2 border-b border-sky-200/15">
-                        <div class="flex items-center gap-1.5 text-sky-100/80 font-medium truncate max-w-[65%]">
-                            <i class="fa-solid ${catIcons[match.category] || 'fa-snowflake text-ice'}"></i>
-                            <span class="truncate">${match.league}</span>
-                        </div>
-                        <div>
-                            ${match.isLive
-                                ? `<span class="flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-extrabold border border-rose-500/35">
-                                     <span class="w-1.5 h-1.5 rounded-full bg-rose-500 live-dot"></span> ${match.time.split('•')[0]}
-                                   </span>`
-                                : `<span class="text-sky-200/70 font-semibold">${match.time}</span>`
-                            }
-                        </div>
-                    </div>
-
-                    <!-- Teams & Live Button -->
-                    <div class="flex items-center justify-between mb-3.5 gap-2">
-                        <div class="space-y-2 flex-1 min-w-0">
-                            <div class="flex items-center gap-2">
-                                <span class="text-base">${match.icon1}</span>
-                                <span class="text-sm font-bold text-white truncate">${match.team1}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-base">${match.icon2}</span>
-                                <span class="text-sm font-bold text-white truncate">${match.team2}</span>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            ${match.score ? `
-                                <div class="bg-[#050c18] border border-sky-200/25 px-2.5 py-1.5 rounded-xl text-center">
-                                    <div class="text-[9px] text-ice font-bold uppercase">Hisob</div>
-                                    <div class="text-xs font-black text-white">${match.score}</div>
-                                </div>
-                            ` : ''}
-
-                            ${match.isLive ? `
-                                <button type="button" onclick="openLivePlayer('${match.id}')"
-                                    class="px-3 py-2 rounded-xl ${isWatching ? 'bg-rose-600 text-white shadow' : 'bg-sky-400/15 hover:bg-sky-400/25 text-sky-100 border border-sky-200/35'} text-xs font-extrabold flex flex-col items-center justify-center gap-0.5 transition active:scale-95">
-                                    <i class="fa-solid ${isWatching ? 'fa-tv' : 'fa-play'} text-xs ${isWatching ? 'text-white' : 'text-ice'}"></i>
-                                    <span class="text-[9px] uppercase tracking-wider">${isWatching ? 'Efirda' : 'Jonli'}</span>
-                                </button>
-                            ` : `
-                                <div class="px-2.5 py-2 rounded-xl bg-slate-900/70 border border-sky-200/10 text-sky-200/50 text-[10px] font-bold flex flex-col items-center">
-                                    <i class="fa-solid fa-clock mb-0.5 text-ice/60"></i>
-                                    <span>Tez kunda</span>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-
-                    <!-- Odds Buttons -->
-                    <div class="grid ${gridCols} gap-2">
-                        ${match.markets.map(mkt => {
-                            const isSelected = selectedPick && selectedPick.code === mkt.code;
-                            return `
-                                <button type="button" onclick="toggleOdd('${match.id}', '${mkt.code}')"
-                                    class="odd-btn ${isSelected ? 'selected' : 'text-white'} rounded-xl py-2.5 px-2.5 flex items-center justify-between">
-                                    <span class="odd-label text-[11px] font-semibold text-sky-200/75 truncate mr-1">${mkt.label}</span>
-                                    <span class="text-xs font-extrabold">${mkt.odd.toFixed(2)}</span>
-                                </button>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // --- LIVE STREAM PLAYER LOGIC ---
-        function openTopLiveStream() {
-            const firstLive = matchesData.find(m => m.isLive);
-            if (firstLive) {
-                openLivePlayer(firstLive.id);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function openLivePlayer(matchId) {
-            const match = matchesData.find(m => m.id === matchId);
-            if (!match || !match.isLive) return;
-
-            activeStreamMatch = match;
-            const playerBox = document.getElementById('live-player-container');
-            playerBox.classList.remove('hidden');
-
-            document.getElementById('player-icon1').textContent = match.icon1;
-            document.getElementById('player-icon2').textContent = match.icon2;
-            document.getElementById('player-team1').textContent = match.team1;
-            document.getElementById('player-team2').textContent = match.team2;
-            document.getElementById('player-score').textContent = match.score;
-            document.getElementById('player-time').textContent = match.time;
-            document.getElementById('player-viewers').textContent = match.viewers;
-            document.getElementById('player-commentary').textContent = match.commentaries[0] || "Jonli translyatsiya ketmoqda...";
-
-            // Unstick category tabs so player is clearly visible at top
-            document.getElementById('category-tabs-wrapper').classList.remove('sticky');
-
-            clearInterval(commentaryTimer);
-            let idx = 0;
-            commentaryTimer = setInterval(() => {
-                if (match.commentaries && match.commentaries.length > 0) {
-                    idx = (idx + 1) % match.commentaries.length;
-                    document.getElementById('player-commentary').textContent = match.commentaries[idx];
-                }
-            }, 3200);
-
-            startSportCanvasAnimation(match.category);
-            if (activeView === 'sports') {
-                renderMatchesView(activeCategory);
-            }
-            showToast(`${match.team1} — ${match.team2} jonli efiri ochildi!`);
-        }
-
-        function closeLivePlayer() {
-            activeStreamMatch = null;
-            document.getElementById('live-player-container').classList.add('hidden');
-            document.getElementById('category-tabs-wrapper').classList.add('sticky');
-            cancelAnimationFrame(streamAnimId);
-            clearInterval(commentaryTimer);
-            if (activeView === 'sports') {
-                renderMatchesView(activeCategory);
-            }
-        }
-
-        function startSportCanvasAnimation(category) {
-            cancelAnimationFrame(streamAnimId);
-            const canvas = document.getElementById('stream-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            canvas.width = canvas.parentElement.clientWidth || 380;
-            canvas.height = canvas.parentElement.clientHeight || 192;
-
-            let t = 0;
-            let ball = { x: canvas.width * 0.5, y: canvas.height * 0.5, vx: 2.2, vy: 1.5 };
-
-            // Helper to draw realistic player silhouette
-            function drawPlayer(x, y, teamColor, numberText, isGoalie = false) {
-                ctx.save();
-                ctx.translate(x, y);
-
-                // Shadow
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-                ctx.beginPath();
-                ctx.ellipse(0, 16, 8, 4, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Body / Jersey
-                ctx.fillStyle = teamColor;
-                ctx.beginPath();
-                ctx.roundRect(-6, -6, 12, 14, 3);
-                ctx.fill();
-
-                // Jersey Number
-                if (numberText) {
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = 'bold 8px Inter, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(numberText, 0, 3);
-                }
-
-                // Head
-                ctx.fillStyle = '#fcd34d'; // Skin tone
-                ctx.beginPath();
-                ctx.arc(0, -12, 4.5, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Legs (animated)
-                ctx.strokeStyle = teamColor;
-                ctx.lineWidth = 2.5;
-                ctx.lineCap = 'round';
-                
-                let legCycle = Math.sin(t * 8) * 4;
-                // Left leg
-                ctx.beginPath();
-                ctx.moveTo(-3, 8);
-                ctx.lineTo(-4 - legCycle, 16);
-                ctx.stroke();
-
-                // Right leg
-                ctx.beginPath();
-                ctx.moveTo(3, 8);
-                ctx.lineTo(4 + legCycle, 16);
-                ctx.stroke();
-
-                ctx.restore();
-            }
-
-            // Helper to draw Referee
-            function drawReferee(x, y) {
-                ctx.save();
-                ctx.translate(x, y);
-                // Black/White striped jersey
-                ctx.fillStyle = '#111827';
-                ctx.beginPath();
-                ctx.roundRect(-5, -6, 10, 13, 2);
-                ctx.fill();
-
-                ctx.fillStyle = '#fcd34d';
-                ctx.beginPath();
-                ctx.arc(0, -11, 4, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Yellow card in hand
-                ctx.fillStyle = '#facc15';
-                ctx.fillRect(4, -8, 3, 5);
-                ctx.restore();
-            }
-
-            function animate() {
-                t += 0.035;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                if (category === 'football') {
-                    // Stadium Field Background
-                    ctx.fillStyle = '#0a2318';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    // Field Markings
-                    ctx.strokeStyle = 'rgba(224, 242, 254, 0.4)';
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeRect(16, 20, canvas.width - 32, canvas.height - 40);
-
-                    // Center line
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.width / 2, 20);
-                    ctx.lineTo(canvas.width / 2, canvas.height - 20);
-                    ctx.stroke();
-
-                    // Center circle
-                    ctx.beginPath();
-                    ctx.arc(canvas.width / 2, canvas.height / 2, 22, 0, Math.PI * 2);
-                    ctx.stroke();
-
-                    // Penalty areas
-                    ctx.strokeRect(16, canvas.height / 2 - 28, 22, 56);
-                    ctx.strokeRect(canvas.width - 38, canvas.height / 2 - 28, 22, 56);
-
-                    // Goals
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(8, canvas.height / 2 - 18, 8, 36);
-                    ctx.strokeRect(canvas.width - 16, canvas.height / 2 - 18, 8, 36);
-
-                    // Ball movement
-                    ball.x += ball.vx + Math.sin(t) * 0.5;
-                    ball.y += ball.vy + Math.cos(t * 1.3) * 0.4;
-                    if (ball.x < 24 || ball.x > canvas.width - 24) ball.vx *= -1;
-                    if (ball.y < 26 || ball.y > canvas.height - 26) ball.vy *= -1;
-
-                    // Goalie 1 (Team 1 - Blue/White)
-                    drawPlayer(24, canvas.height / 2 + Math.sin(t * 2) * 12, '#38bdf8', '1', true);
-                    // Goalie 2 (Team 2 - Red/White)
-                    drawPlayer(canvas.width - 24, canvas.height / 2 + Math.cos(t * 2) * 12, '#f43f5e', '12', true);
-
-                    // Field Players Team 1 (Blue)
-                    drawPlayer(canvas.width * 0.32 + Math.sin(t) * 15, canvas.height * 0.3 + Math.cos(t * 1.5) * 10, '#38bdf8', '10');
-                    drawPlayer(canvas.width * 0.38 + Math.cos(t * 0.9) * 12, canvas.height * 0.7 + Math.sin(t) * 12, '#38bdf8', '7');
-                    drawPlayer(canvas.width * 0.25 + Math.sin(t * 1.2) * 10, canvas.height * 0.5 + Math.cos(t) * 15, '#38bdf8', '9');
-
-                    // Field Players Team 2 (Red)
-                    drawPlayer(canvas.width * 0.62 + Math.cos(t) * 15, canvas.height * 0.35 + Math.sin(t * 1.4) * 10, '#f43f5e', '11');
-                    drawPlayer(canvas.width * 0.68 + Math.sin(t * 0.8) * 12, canvas.height * 0.65 + Math.cos(t) * 12, '#f43f5e', '8');
-                    drawPlayer(canvas.width * 0.75 + Math.cos(t * 1.1) * 10, canvas.height * 0.5 + Math.sin(t * 1.3) * 15, '#f43f5e', '10');
-
-                    // Referee
-                    drawReferee(canvas.width * 0.5 + Math.sin(t * 0.5) * 25, canvas.height * 0.25 + Math.cos(t * 0.7) * 20);
-
-                    // Animated Ball
-                    ctx.fillStyle = '#ffffff';
-                    ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-                    ctx.shadowBlur = 6;
-                    ctx.beginPath();
-                    ctx.arc(ball.x, ball.y, 4.5, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-
-                } else if (category === 'combat') {
-                    ctx.fillStyle = '#080e1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    const cx = canvas.width / 2;
-                    const cy = canvas.height / 2;
-                    const rx = Math.min(canvas.width * 0.38, 130);
-                    const ry = 55;
-
-                    ctx.fillStyle = '#111b2e';
-                    ctx.strokeStyle = '#38bdf8';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
-
-                    drawPlayer(cx - 24 + Math.sin(t * 2.5) * 12, cy + Math.cos(t * 2) * 6, '#38bdf8', 'MMA');
-                    drawPlayer(cx + 24 + Math.sin(t * 2.5 + 1) * 12, cy + Math.cos(t * 2 + 1) * 6, '#f43f5e', 'UFC');
-
-                } else if (category === 'basketball') {
-                    ctx.fillStyle = '#141019';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
-
-                    drawPlayer(canvas.width * 0.35 + Math.sin(t) * 20, canvas.height * 0.5, '#f59e0b', '23');
-                    drawPlayer(canvas.width * 0.65 + Math.cos(t) * 20, canvas.height * 0.5, '#38bdf8', '30');
-
-                } else if (category === 'tennis') {
-                    ctx.fillStyle = '#071b34';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.strokeStyle = 'rgba(224, 242, 254, 0.55)';
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
-
-                    drawPlayer(canvas.width * 0.3, canvas.height / 2 + Math.sin(t * 2) * 25, '#bef264', '1');
-                    drawPlayer(canvas.width * 0.7, canvas.height / 2 + Math.cos(t * 2) * 25, '#38bdf8', '2');
-
-                } else {
-                    // Esports
-                    ctx.fillStyle = '#060a14';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    const cx = canvas.width / 2;
-                    const cy = canvas.height / 2;
-                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
-                    ctx.beginPath();
-                    ctx.arc(cx, cy, 48, 0, Math.PI * 2);
-                    ctx.stroke();
-
-                    drawPlayer(cx - 30, cy, '#38bdf8', 'CS');
-                    drawPlayer(cx + 30, cy, '#f43f5e', 'G2');
-                }
-
-                streamAnimId = requestAnimationFrame(animate);
-            }
-            animate();
-        }
-
-        // --- BET SLIP (KUPON) LOGIC ---
-        function toggleOdd(matchId, code) {
-            const match = matchesData.find(m => m.id === matchId);
-            if (!match) return;
-            const market = match.markets.find(mk => mk.code === code);
-            if (!market) return;
-
-            const idx = coupon.findIndex(c => c.matchId === matchId);
-            if (idx !== -1) {
-                if (coupon[idx].code === code) {
-                    coupon.splice(idx, 1);
-                } else {
-                    coupon[idx] = {
-                        matchId: match.id,
-                        matchTitle: `${match.team1} — ${match.team2}`,
-                        code: market.code,
-                        marketLabel: market.label,
-                        odd: market.odd
-                    };
-                }
-            } else {
-                coupon.push({
-                    matchId: match.id,
-                    matchTitle: `${match.team1} — ${match.team2}`,
-                    code: market.code,
-                    marketLabel: market.label,
-                    odd: market.odd
-                });
-            }
-
-            updateCouponFloatingBar();
-            if (activeView === 'sports') {
-                renderMatchesView(activeCategory);
-            }
-        }
-
-        function updateCouponFloatingBar() {
-            const bar = document.getElementById('floating-coupon-bar');
-            if (coupon.length > 0) {
-                const totalOdd = coupon.reduce((acc, item) => acc * item.odd, 1);
-                bar.classList.remove('hidden');
-                document.getElementById('floating-count').textContent = coupon.length;
-                document.getElementById('floating-odds-text').textContent = `Umumiy koeff: ${totalOdd.toFixed(2)}`;
-            } else {
-                bar.classList.add('hidden');
-            }
-        }
-
-        function openBetSlipDrawer() {
-            document.getElementById('betslip-drawer').classList.remove('hidden');
-            renderCouponDrawer();
-        }
-
-        function closeBetSlipDrawer() {
-            document.getElementById('betslip-drawer').classList.add('hidden');
-        }
-
-        function renderCouponDrawer() {
-            const listEl = document.getElementById('coupon-items-list');
-            const footerEl = document.getElementById('coupon-footer');
-            document.getElementById('drawer-count').textContent = coupon.length;
-
-            if (coupon.length === 0) {
-                listEl.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fa-solid fa-ticket text-4xl text-sky-200/30 mb-2"></i>
-                        <p class="text-sm font-bold text-white">Kuponingiz bo'sh</p>
-                        <p class="text-xs text-sky-200/60 mt-1">Stavka tikish uchun o'yin koeffitsiyentini tanlang.</p>
-                    </div>
-                `;
-                footerEl.classList.add('hidden');
-                return;
-            }
-
-            footerEl.classList.remove('hidden');
-            listEl.innerHTML = coupon.map((item, i) => `
-                <div class="bg-obsidian/95 border border-sky-200/20 rounded-2xl p-3 flex items-center justify-between">
-                    <div class="pr-2">
-                        <div class="text-xs font-bold text-white">${item.matchTitle}</div>
-                        <div class="text-[11px] text-ice font-semibold mt-0.5">Tanlov: ${item.marketLabel}</div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-lg bg-ice/15 text-ice font-extrabold text-xs border border-ice/30">${item.odd.toFixed(2)}</span>
-                        <button type="button" onclick="removeCouponPick(${i})" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-rose-500/25 text-sky-200/70 hover:text-rose-400 flex items-center justify-center">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            recalculatePayout();
-        }
-
-        function removeCouponPick(idx) {
-            coupon.splice(idx, 1);
-            updateCouponFloatingBar();
-            renderCouponDrawer();
-            if (activeView === 'sports') renderMatchesView(activeCategory);
-        }
-
-        function clearCoupon() {
-            coupon = [];
-            updateCouponFloatingBar();
-            renderCouponDrawer();
-            if (activeView === 'sports') renderMatchesView(activeCategory);
-        }
-
-        function setQuickStake(val) {
-            document.getElementById('stake-input').value = val;
-            recalculatePayout();
-        }
-
-        function recalculatePayout() {
-            const stake = parseFloat(document.getElementById('stake-input').value) || 0;
-            const totalOdd = coupon.reduce((acc, item) => acc * item.odd, 1);
-            const payout = stake * totalOdd;
-
-            document.getElementById('total-odds-display').textContent = totalOdd.toFixed(2);
-            document.getElementById('potential-win-display').textContent = `${formatUZS(payout)} UZS`;
-        }
-
-        function placeCouponBet() {
-            if (coupon.length === 0) return;
-            const stake = parseFloat(document.getElementById('stake-input').value) || 0;
-
-            if (stake < 1000) {
-                showToast("Minimal stavka 1 000 UZS!", "error");
-                return;
-            }
-            if (stake > balance) {
-                showToast("Balansda mablag' yetarli emas!", "error");
-                return;
-            }
-
-            const totalOdd = coupon.reduce((acc, item) => acc * item.odd, 1);
-            const potentialWin = stake * totalOdd;
-
-            balance -= stake;
-            updateBalanceDisplay();
-
-            const now = new Date();
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-            historyLog.unshift({
-                type: 'sport',
-                id: 'CB-' + Math.floor(100000 + Math.random() * 900000),
-                time: `Bugun, ${timeStr}`,
-                title: coupon.map(c => `${c.matchTitle} (${c.marketLabel})`).join(' • '),
-                stake: stake,
-                odd: totalOdd.toFixed(2),
-                resultText: `Kutilmoqda (${formatUZS(potentialWin)} UZS)`,
-                statusColor: 'text-amber-400'
-            });
-
-            updateHistoryBadge();
-            coupon = [];
-            updateCouponFloatingBar();
-            closeBetSlipDrawer();
-            if (activeView === 'sports') renderMatchesView(activeCategory);
-            showToast("Stavkangiz muvaffaqiyatli qabul qilindi! ❄️");
-        }
-
-        function updateHistoryBadge() {
-            const badge = document.getElementById('history-badge');
-            if (historyLog.length > 0) {
-                badge.classList.remove('hidden');
-                badge.textContent = historyLog.length;
-            }
-        }
-
-        // --- 6. MINI-GAMES ("TEZKOR O'YINLAR") ---
-        function renderMiniGamesView() {
-            const container = document.getElementById('main-content');
-            container.innerHTML = `
-                <div class="space-y-4 pb-4">
-                    <div class="pt-1">
-                        <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-dice text-ice"></i> Tezkor O‘yinlar
-                        </h2>
-                        <p class="text-[11px] text-sky-200/70">Balansingiz orqali bir zumda o'ynang va yutuqlarni qo'lga kiriting!</p>
-                    </div>
-
-                    <!-- GAME 1: MUZLI KUBIK -->
-                    <div class="glass-card rounded-2xl p-4 space-y-3">
-                        <div class="flex items-center justify-between border-b border-sky-200/15 pb-2.5">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-xl bg-sky-400/20 border border-sky-200/30 flex items-center justify-center text-base">🎲</span>
-                                <div>
-                                    <h3 class="text-sm font-extrabold text-white">Muzli Kubik</h3>
-                                    <p class="text-[10px] text-sky-200/70">1-3 yoki 4-6 ni toping • Koeff <span class="text-ice font-bold">x1.95</span></p>
-                                </div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">x1.95</span>
-                        </div>
-
-                        <div class="bg-[#050c18] border border-sky-200/20 rounded-2xl p-3.5 flex items-center justify-between">
-                            <div>
-                                <div class="text-[10px] text-sky-200/60">Kubik natijasi:</div>
-                                <div id="dice-status" class="text-xs font-bold text-sky-100 mt-0.5">Oraliqni tanlang</div>
-                            </div>
-                            <div id="dice-visual" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-white to-ice text-obsidian font-black text-2xl flex items-center justify-center shadow-ice-sm transition-transform duration-300">
-                                ?
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px] text-sky-200/70">Stavka:</span>
-                            <input type="number" id="dice-stake" value="20000" min="1000" step="5000"
-                                class="w-full bg-obsidian border border-sky-200/25 rounded-xl px-3 py-1.5 text-xs font-extrabold text-white outline-none focus:border-ice">
-                            <button type="button" onclick="document.getElementById('dice-stake').value=50000" class="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-sky-200/20 text-[10px] font-bold text-sky-100">50K</button>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <button type="button" onclick="playIceDice('low')" class="odd-btn rounded-xl py-2.5 px-3 text-center hover:border-ice">
-                                <div class="text-xs font-extrabold text-white">1 - 3 (Kichik)</div>
-                                <div class="text-[10px] font-bold text-ice">x1.95</div>
-                            </button>
-                            <button type="button" onclick="playIceDice('high')" class="odd-btn rounded-xl py-2.5 px-3 text-center hover:border-ice">
-                                <div class="text-xs font-extrabold text-white">4 - 6 (Katta)</div>
-                                <div class="text-[10px] font-bold text-ice">x1.95</div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- GAME 2: QORLI PENALTI -->
-                    <div class="glass-card rounded-2xl p-4 space-y-3">
-                        <div class="flex items-center justify-between border-b border-sky-200/15 pb-2.5">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-xl bg-sky-400/20 border border-sky-200/30 flex items-center justify-center text-base">⚽</span>
-                                <div>
-                                    <h3 class="text-sm font-extrabold text-white">Qorli Penalti</h3>
-                                    <p class="text-[10px] text-sky-200/70">Darvozabonni aldang • Koeff <span class="text-ice font-bold">x2.75</span></p>
-                                </div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded-md bg-sky-400/20 text-sky-200 border border-sky-200/30 text-[10px] font-bold">x2.75</span>
-                        </div>
-
-                        <div class="bg-gradient-to-b from-[#0a2342] to-[#050f1f] border-2 border-sky-200/40 rounded-2xl p-3.5 text-center overflow-hidden">
-                            <div class="text-[10px] text-sky-200/70 uppercase tracking-widest mb-1">Zarba yo‘nalishini tanlang</div>
-                            <div id="penalty-keeper" class="text-3xl transition-transform duration-300 my-1">🧤</div>
-                            <div id="penalty-result" class="text-xs font-bold text-sky-100 mt-1">Chap, Markaz yoki O'ng burchak</div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px] text-sky-200/70">Stavka:</span>
-                            <input type="number" id="penalty-stake" value="25000" min="1000" step="5000"
-                                class="w-full bg-obsidian border border-sky-200/25 rounded-xl px-3 py-1.5 text-xs font-extrabold text-white outline-none focus:border-ice">
-                            <button type="button" onclick="document.getElementById('penalty-stake').value=100000" class="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-sky-200/20 text-[10px] font-bold text-sky-100">100K</button>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2">
-                            <button type="button" onclick="playSnowPenalty('left')" class="odd-btn rounded-xl py-2.5 px-2 text-center hover:border-ice">
-                                <div class="text-xs font-extrabold text-white">⬅️ Chap</div>
-                                <div class="text-[10px] text-ice font-bold">x2.75</div>
-                            </button>
-                            <button type="button" onclick="playSnowPenalty('center')" class="odd-btn rounded-xl py-2.5 px-2 text-center hover:border-ice">
-                                <div class="text-xs font-extrabold text-white">⬆️ Markaz</div>
-                                <div class="text-[10px] text-ice font-bold">x2.75</div>
-                            </button>
-                            <button type="button" onclick="playSnowPenalty('right')" class="odd-btn rounded-xl py-2.5 px-2 text-center hover:border-ice">
-                                <div class="text-xs font-extrabold text-white">➡️ O'ng</div>
-                                <div class="text-[10px] text-ice font-bold">x2.75</div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- GAME 3: MUZ G'ILDIRAGI -->
-                    <div class="glass-card rounded-2xl p-4 space-y-3">
-                        <div class="flex items-center justify-between border-b border-sky-200/15 pb-2.5">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-xl bg-sky-400/20 border border-sky-200/30 flex items-center justify-center text-base">🎡</span>
-                                <div>
-                                    <h3 class="text-sm font-extrabold text-white">Muz G‘ildiragi</h3>
-                                    <p class="text-[10px] text-sky-200/70">0x, 1.5x, 2x, 3x, 5x koeffitsiyentlar</p>
-                                </div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold">Max 5x</span>
-                        </div>
-
-                        <div class="flex items-center justify-between bg-[#050c18] border border-sky-200/20 rounded-2xl p-3.5">
-                            <div class="space-y-1 max-w-[62%]">
-                                <div class="flex flex-wrap gap-1 text-[10px] font-extrabold">
-                                    <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">0x</span>
-                                    <span class="px-1.5 py-0.5 rounded bg-sky-900/60 text-sky-200">1.5x</span>
-                                    <span class="px-1.5 py-0.5 rounded bg-sky-500/30 text-ice">2x</span>
-                                    <span class="px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300">3x</span>
-                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/30 text-amber-300">5x</span>
-                                </div>
-                                <div id="wheel-result" class="text-[11px] text-sky-200/85 pt-1">Aylantirish tugmasini bosing!</div>
-                            </div>
-                            <div id="frost-wheel" class="w-16 h-16 rounded-full border-4 border-ice bg-gradient-to-tr from-[#0b2240] via-[#174276] to-sky-300/30 flex items-center justify-center shadow-ice-glow transition-transform duration-1000 ease-out">
-                                <i class="fa-solid fa-snowflake text-2xl text-white"></i>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <input type="number" id="wheel-stake" value="30000" min="1000" step="5000"
-                                class="w-1/2 bg-obsidian border border-sky-200/25 rounded-xl px-3 py-2.5 text-xs font-extrabold text-white outline-none focus:border-ice">
-                            <button type="button" onclick="spinFrostWheel()" class="w-1/2 py-2.5 rounded-xl bg-gradient-to-r from-sky-100 via-ice to-sky-500 text-obsidian font-black text-xs uppercase tracking-wider shadow-ice-sm active:scale-95 transition">
-                                Aylantirish ❄️
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function logMiniGameHistory(gameName, stake, multiplier, winAmount) {
-            const now = new Date();
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            historyLog.unshift({
-                type: 'minigame',
-                id: 'MG-' + Math.floor(10000 + Math.random() * 90000),
-                time: `Bugun, ${timeStr}`,
-                title: gameName,
-                stake: stake,
-                odd: `${multiplier}x`,
-                resultText: winAmount > 0 ? `+${formatUZS(winAmount)} UZS` : '0 UZS',
-                statusColor: winAmount > 0 ? 'text-emerald-400' : 'text-rose-400'
-            });
-            updateHistoryBadge();
-        }
-
-        function playIceDice(choice) {
-            const stake = parseFloat(document.getElementById('dice-stake').value) || 0;
-            if (stake < 1000) return showToast("Minimal stavka 1 000 UZS!", "error");
-            if (stake > balance) return showToast("Balansda mablag' yetarli emas!", "error");
-
-            balance -= stake;
-            updateBalanceDisplay();
-
-            const roll = Math.floor(Math.random() * 6) + 1;
-            const diceEl = document.getElementById('dice-visual');
-            const statusEl = document.getElementById('dice-status');
-            diceEl.style.transform = 'rotate(360deg) scale(1.1)';
-            setTimeout(() => { diceEl.style.transform = 'rotate(0deg) scale(1)'; }, 280);
-            diceEl.textContent = roll;
-
-            const isWin = (choice === 'low' && roll <= 3) || (choice === 'high' && roll >= 4);
-            if (isWin) {
-                const winAmount = stake * 1.95;
-                balance += winAmount;
-                updateBalanceDisplay();
-                statusEl.innerHTML = `<span class="text-emerald-400">G'alaba! Kubik: ${roll} (+${formatUZS(winAmount)} UZS)</span>`;
-                showToast(`Tabriklaymiz! +${formatUZS(winAmount)} UZS yutdingiz!`);
-                logMiniGameHistory('Muzli Kubik', stake, 1.95, winAmount);
-            } else {
-                statusEl.innerHTML = `<span class="text-rose-400">Kubik ${roll} tushdi. Yana urinib ko'ring!</span>`;
-                showToast(`Kubik ${roll} tushdi.`, "error");
-                logMiniGameHistory('Muzli Kubik', stake, 0, 0);
-            }
-        }
-
-        function playSnowPenalty(dir) {
-            const stake = parseFloat(document.getElementById('penalty-stake').value) || 0;
-            if (stake < 1000) return showToast("Minimal stavka 1 000 UZS!", "error");
-            if (stake > balance) return showToast("Balansda mablag' yetarli emas!", "error");
-
-            balance -= stake;
-            updateBalanceDisplay();
-
-            const dirs = ['left', 'center', 'right'];
-            const keeperDir = dirs[Math.floor(Math.random() * dirs.length)];
-            const keeperEl = document.getElementById('penalty-keeper');
-            const resEl = document.getElementById('penalty-result');
-
-            if (keeperDir === 'left') keeperEl.style.transform = 'translateX(-45px) rotate(-15deg)';
-            else if (keeperDir === 'right') keeperEl.style.transform = 'translateX(45px) rotate(15deg)';
-            else keeperEl.style.transform = 'translateX(0px) scale(1.2)';
-
-            if (dir !== keeperDir) {
-                const winAmount = stake * 2.75;
-                balance += winAmount;
-                updateBalanceDisplay();
-                resEl.innerHTML = `<span class="text-emerald-400">GOOOOL! ⚽ (+${formatUZS(winAmount)} UZS)</span>`;
-                showToast(`GOOOL! +${formatUZS(winAmount)} UZS yutdingiz!`);
-                logMiniGameHistory('Qorli Penalti', stake, 2.75, winAmount);
-            } else {
-                resEl.innerHTML = `<span class="text-rose-400">SEYV! 🧤 Darvozabon zarbani qaytardi!</span>`;
-                showToast("Darvozabon to'pni qaytardi!", "error");
-                logMiniGameHistory('Qorli Penalti', stake, 0, 0);
-            }
-        }
-
-        function spinFrostWheel() {
-            if (isWheelSpinning) return;
-            const stake = parseFloat(document.getElementById('wheel-stake').value) || 0;
-            if (stake < 1000) return showToast("Minimal stavka 1 000 UZS!", "error");
-            if (stake > balance) return showToast("Balansda mablag' yetarli emas!", "error");
-
-            isWheelSpinning = true;
-            balance -= stake;
-            updateBalanceDisplay();
-
-            const sectors = [0, 1.5, 2, 0, 1.5, 3, 0, 5];
-            const picked = sectors[Math.floor(Math.random() * sectors.length)];
-            wheelAngle += 720 + Math.floor(Math.random() * 360);
-
-            const wheelEl = document.getElementById('frost-wheel');
-            wheelEl.style.transform = `rotate(${wheelAngle}deg)`;
-
+        function makeNoise() {
+            document.getElementById('granny-status').innerText = "⚠️ Granny tovushni eshitib yugurib keldi!";
             setTimeout(() => {
-                isWheelSpinning = false;
-                const resEl = document.getElementById('wheel-result');
-                if (picked > 0) {
-                    const winAmount = stake * picked;
-                    balance += winAmount;
-                    updateBalanceDisplay();
-                    resEl.innerHTML = `<span class="text-emerald-400 font-extrabold">Natija: ${picked}x (+${formatUZS(winAmount)} UZS)</span>`;
-                    showToast(`Muz G‘ildiragi ${picked}x berdi! +${formatUZS(winAmount)} UZS`);
-                    logMiniGameHistory('Muz G‘ildiragi', stake, picked, winAmount);
-                } else {
-                    resEl.innerHTML = `<span class="text-rose-400 font-bold">Natija: 0x. Yana aylantirib ko'ring!</span>`;
-                    showToast("0x sektor tushdi.", "error");
-                    logMiniGameHistory('Muz G‘ildiragi', stake, 0, 0);
+                triggerJumpscare();
+            }, 1200);
+        }
+
+        function startGrannyAI() {
+            // Tasodifiy vaqtda Granny hujum qilishi mumkin
+            setTimeout(() => {
+                if(document.getElementById('game-screen').classList.contains('active')) {
+                    triggerJumpscare();
                 }
-            }, 1000);
+            }, 15000);
         }
 
-        // --- 7. HISTORY VIEW ("TARIX") ---
-        function renderHistoryView() {
-            const container = document.getElementById('main-content');
-            let html = `
-                <div class="flex items-center justify-between pt-1 pb-1">
-                    <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-scroll text-ice"></i> Stavkalar va O‘yinlar Tarixi
-                    </h2>
-                    <span class="text-xs text-sky-200/70">Jami: ${historyLog.length} ta</span>
-                </div>
-            `;
+        function triggerJumpscare() {
+            showScreen('jumpscare-screen');
+            document.getElementById('days-left').innerText = (5 - currentDay);
+        }
 
-            if (historyLog.length === 0) {
-                html += `
-                    <div class="glass-card rounded-2xl p-8 text-center mt-2">
-                        <i class="fa-solid fa-snowflake text-3xl text-sky-300/40 mb-2"></i>
-                        <p class="text-sm font-bold text-white">Hali tarix bo'sh</p>
-                        <p class="text-xs text-sky-200/60 mt-1">Sport o'yinlariga stavka tiking yoki tezkor o'yinlarni sinab ko'ring.</p>
-                        <button type="button" onclick="navigateTo('sports', 'football')" class="mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-sky-100 to-ice text-obsidian text-xs font-extrabold">O'yinlarga o'tish</button>
-                    </div>
-                `;
-                container.innerHTML = html;
-                return;
+        function restartDay() {
+            currentDay++;
+            if(currentDay > 5) {
+                alert("O'yin tugadi! Granny sizni yutdi.");
+                currentDay = 1;
+                showScreen('menu-screen');
+            } else {
+                document.getElementById('day-count').innerText = currentDay;
+                showScreen('game-screen');
+                startGrannyAI();
             }
-
-            historyLog.forEach(item => {
-                html += `
-                <div class="glass-card rounded-2xl p-3.5 space-y-2">
-                    <div class="flex items-center justify-between border-b border-sky-200/15 pb-1.5">
-                        <div>
-                            <span class="text-xs font-extrabold text-ice">${item.id}</span>
-                            <span class="text-[10px] text-sky-200/60 ml-2">${item.time}</span>
-                        </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-400/10 text-sky-200 border border-sky-200/20">
-                            ${item.type === 'sport' ? 'Sport Kupon' : 'Tezkor O‘yin'}
-                        </span>
-                    </div>
-                    <div class="text-xs font-bold text-white">${item.title}</div>
-                    <div class="bg-[#050c18] rounded-xl p-2.5 flex justify-between items-center text-xs border border-sky-200/15">
-                        <div>
-                            <div class="text-[10px] text-sky-200/60">Stavka</div>
-                            <div class="font-bold text-white">${formatUZS(item.stake)} UZS</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-[10px] text-sky-200/60">Koeff</div>
-                            <div class="font-extrabold text-ice">${item.odd}</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-[10px] text-sky-200/60">Natija</div>
-                            <div class="font-extrabold ${item.statusColor}">${item.resultText}</div>
-                        </div>
-                    </div>
-                </div>
-                `;
-            });
-
-            container.innerHTML = html;
         }
-
-        // --- INITIALIZE APP ---
-        window.onload = function() {
-            initSnowfall();
-            updateBalanceDisplay();
-            selectCategory('football');
-        };
     </script>
 </body>
 </html>
